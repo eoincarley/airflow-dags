@@ -21,15 +21,15 @@ with DAG(
     tags=['example'],
 ) as dag:
   
-    @task(task_id='justprint')
-    def printtask():
-        print('Finished.')
+    @task(task_id='add_info_to_db')
+    def add_info_to_db():
+        print('Added song information to database.')
 
     task3 = printtask()
 
-    @task(task_id='add_songs')
-    def add_songs():
-        print('Adding songs to bucket')
+    @task(task_id='add_songs_to_bucket')
+    def add_songs_to_bucket():
+        print('Adding songs to Minio bucket')
 
     task2 = add_songs()
 
@@ -61,4 +61,4 @@ with DAG(
 
     task1 = minio_add_bucket('songs')
 
-task1 >> [task2, task3]
+task1 >> task2 >> task3
