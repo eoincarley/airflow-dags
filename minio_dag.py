@@ -21,23 +21,30 @@ with DAG(
     tags=['example'],
 ) as dag:
   
+    #--------------------------------------------------------#
+    #    Define bucket, Minio endpoint. Setup Minio client
+    #
     @task(task_id='add_info_to_db')
     def add_info_to_db():
         print('Added song information to database.')
 
-    task3 = printtask()
+    task3 = add_info_to_db()
 
+    #--------------------------------------------------------#
+    #    Define bucket, Minio endpoint. Setup Minio client
+    #
     @task(task_id='add_songs_to_bucket')
     def add_songs_to_bucket():
         print('Adding songs to Minio bucket')
 
-    task2 = add_songs()
+    task2 = ad_songs_to_bucket()
 
+    #--------------------------------------------------------#
+    #    Define bucket, Minio endpoint. Setup Minio client
+    #
     @task(task_id="minio_add_bucket")
     def minio_add_bucket(bucket_name, **kwargs):
-        #--------------------------------------------------------#
-        #    Define bucket, Minio endpoint. Setup Minio client
-        #
+       
         minio_port = ':9000'
         minio_service = 'minio-service'
         minio_endpoint = ''.join((minio_service, minio_port))
