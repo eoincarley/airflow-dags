@@ -4,7 +4,7 @@ virtual environment.
 """
 import logging
 import time
-import pendulum
+import datetime
 #from minio import Minio
 #from minio.error import S3Error
 
@@ -14,9 +14,9 @@ from airflow.decorators import task
 log = logging.getLogger(__name__)
 
 with DAG(
-    dag_id='Minio-DAG',
+    dag_id='MusicApp-DAG',
     schedule_interval=None,
-    start_date=pendulum.datetime(2021, 1, 1, tz="UTC"),
+    start_date=datetime.datetime(2021, 1, 1, tz="UTC"),
     catchup=False,
     tags=['example'],
 ) as dag:
@@ -53,7 +53,7 @@ with DAG(
 
         print('Attempting to connect to %s with user %s and password %s.' %(minio_endpoint, username, password))
 
-        '''
+      
         minio_client = get_minio_client('testkey', 'secretkey', 
                                         minio_endpoint=minio_endpoint)
         try:
@@ -63,7 +63,7 @@ with DAG(
                 print('Bucket \'%s\' already exists' %(bucket_name))
         except S3Error as exc:
             print("Error occurred during bucket query/creation:", exc)
-        '''
+        
         return None
 
     task1 = minio_add_bucket('songs')
