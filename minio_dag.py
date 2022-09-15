@@ -5,8 +5,8 @@ virtual environment.
 import logging
 import time
 import datetime
-#from minio import Minio
-#from minio.error import S3Error
+from minio import Minio
+from minio.error import S3Error
 
 from airflow import DAG
 from airflow.decorators import task
@@ -16,7 +16,7 @@ log = logging.getLogger(__name__)
 with DAG(
     dag_id='MusicApp-DAG',
     schedule_interval=None,
-    start_date=datetime.datetime(2021, 1, 1, tz="UTC"),
+    start_date=datetime.datetime(2021, 1, 1),
     catchup=False,
     tags=['example'],
 ) as dag:
