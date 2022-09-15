@@ -27,6 +27,12 @@ with DAG(
 
     task2 = printtask()
 
+    @task(task_id='justprint')
+    def printtask1():
+        print('Not doing anything in particular')
+
+    task3 = printtask1()
+
     @task(task_id="print_the_context")
     def minio_add_bucket(bucket_name, **kwargs):
         #--------------------------------------------------------#
