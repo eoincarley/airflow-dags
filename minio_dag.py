@@ -61,4 +61,4 @@ with DAG(
 
     task1 = minio_add_bucket('songs')
 
-task1 >> task3
+task1 >> [task2, task3]
