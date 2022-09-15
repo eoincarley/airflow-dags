@@ -37,7 +37,7 @@ with DAG(
     def add_songs_to_bucket():
         print('Adding songs to Minio bucket')
 
-    task2 = ad_songs_to_bucket()
+    task2 = add_songs_to_bucket()
 
     #--------------------------------------------------------#
     #    Define bucket, Minio endpoint. Setup Minio client
