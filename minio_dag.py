@@ -23,17 +23,17 @@ with DAG(
   
     @task(task_id='justprint')
     def printtask():
-        print('Not doing anything in particular')
+        print('Finished.')
 
-    task2 = printtask()
+    task3 = printtask()
 
-    @task(task_id='justprint')
-    def printtask1():
-        print('Not doing anything in particular')
+    @task(task_id='add_songs')
+    def add_songs():
+        print('Adding songs to bucket')
 
-    task3 = printtask1()
+    task2 = add_songs()
 
-    @task(task_id="print_the_context")
+    @task(task_id="minio_add_bucket")
     def minio_add_bucket(bucket_name, **kwargs):
         #--------------------------------------------------------#
         #    Define bucket, Minio endpoint. Setup Minio client
@@ -61,4 +61,4 @@ with DAG(
 
     task1 = minio_add_bucket('songs')
 
-task1 >> task2
+task1 >> task3
