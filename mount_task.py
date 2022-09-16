@@ -40,7 +40,7 @@ with DAG(
     tags=['example3'],
 ) as dag:
 
-        @task(rask_id=volume_mount)
+        @task(task_id='volume_mount')
         def test_volume_mount():
             """
             Tests whether the volume has been mounted.
