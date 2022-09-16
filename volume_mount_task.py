@@ -81,10 +81,11 @@ if k8s:
             Tests whether the volume has been mounted.
             """
 
-            with open('/home/volume_mount_test.txt', 'w') as foo:
-                foo.write('Hello')
+            with open('/home/readme.txt') as f:
+                lines = f.readlines()
+                print(lines)
 
-            return_code = os.system("cat /home/volume_mount_test.txt")
+            return_code = os.system("cat /home/readme.txt")
             if return_code != 0:
                 raise ValueError(f"Error when checking volume mount. Return code {return_code}")
 
