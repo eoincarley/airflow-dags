@@ -80,7 +80,7 @@ if k8s:
             """
             Tests whether the volume has been mounted.
             """
-
+            os.system('mkdir /foo')
             with open('/foo/volume_mount_test.txt', 'w') as foo:
                 foo.write('Hello')
 
