@@ -53,9 +53,10 @@ with DAG(
 
         print('Attempting to connect to %s with user %s and password %s.' %(minio_endpoint, username, password))
 
-      
-        minio_client = get_minio_client('testkey', 'secretkey', 
-                                        minio_endpoint=minio_endpoint)
+        minio_client = Minio(minio_endpoint, 
+                                access_key = accesskey,
+                                secret_key = secretkey,
+                                secure = False)
         try:
             if (not minio_client.bucket_exists(bucket_name)):
                 minio_client.make_bucket(bucket_name)
