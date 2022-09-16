@@ -2,6 +2,7 @@
 Example DAG demonstrating the usage of the TaskFlow API to execute Python functions natively and within a
 virtual environment.
 """
+import os
 import logging
 import time
 import datetime
@@ -12,6 +13,38 @@ from airflow import DAG
 from airflow.decorators import task
 
 log = logging.getLogger(__name__)
+
+def minio_add_bucket(bucket_name, minio_service = 'minio-service.default.svc.cluster.local',
+                            minio_port='9000',
+                            username = 'testkey',
+                            password = 'secretkey', **kwargs):
+
+        minio_endpoin = ':'.join((minio_service, minio_port))              
+
+        print('Connecting to %s with user %s and password %s.' %(minio_endpoint, username, password))
+
+        minio_client = Minio(minio_endpoint, 
+                                access_key = username,
+                                secret_key = password,
+                                secure = False)
+        try:
+            if (not minio_client.bucket_exists(bucket_name)):
+                minio_client.make_bucket(bucket_name)
+            else:
+                print('Bucket \'%s\' already exists' %(bucket_name))
+        except S3Error as exc:
+            print("Error occurred during bucket query/creation:", exc)
+
+
+        path = "/mnt/c/Users/EoinCarley/Desktop/musicapp.songs/mp3files/"
+        filenames = os.listdir(path)
+        print(filenames)
+        #for file in filenames:
+        #    minio_client.fput_object(
+        #        bucket_name, file, ''.join((path, file)))
+        #return None
+
+        
 
 with DAG(
     dag_id='MusicApp-DAG',
@@ -43,15 +76,14 @@ with DAG(
     #    Define bucket, Minio endpoint. Setup Minio client
     #
     @task(task_id="minio_add_bucket")
-    def minio_add_bucket(bucket_name, **kwargs):
-       
-        minio_port = ':9000'
-        minio_service = 'minio-service.default.svc.cluster.local'
-        minio_endpoint = ''.join((minio_service, minio_port))
-        username = 'testkey'
-        password = 'secretkey'
+    def minio_add_bucket(bucket_name, minio_service = 'minio-service.default.svc.cluster.local',
+                            minio_port='9000',
+                            username = 'testkey',
+                            password = 'secretkey', **kwargs):
 
-        print('Attempting to connect to %s with user %s and password %s.' %(minio_endpoint, username, password))
+        minio_endpoin = ':'.join((minio_service, minio_port))              
+
+        print('Connecting to %s with user %s and password %s.' %(minio_endpoint, username, password))
 
         minio_client = Minio(minio_endpoint, 
                                 access_key = username,
@@ -65,7 +97,44 @@ with DAG(
         except S3Error as exc:
             print("Error occurred during bucket query/creation:", exc)
         
-        return None
+        #--------------------------------------------------------#
+        #    Define bucket, Minio endpoint. Setup Minio client
+        #
+        # Note here I'll need to mount a volume to the localhost. 
+        # See https://www.aylakhan.tech/?p=655 for potential solution:
+        # 
+        '''
+            my_python_task = PythonOperator(
+            task_id = "my_python_task",
+            executor_config={
+                "KubernetesExecutor": {
+                "volumes": [
+                    {
+                    "name": “my-volume",
+                    "persistentVolumeClaim":
+                        {
+                        "claimName": “my-volume"
+                        }
+                    }
+                ],
+                "volume_mounts": [
+                    {
+                    "name": “my-volume",
+                    "mountPath": “/usr/local/tmp"
+                    }
+                ]
+                }
+            },
+            ...
+            )
+        '''
+        path = "/mnt/c/Users/EoinCarley/Desktop/musicapp.songs/mp3files/"
+        filenames = os.listdir(path)
+        print(filenames)
+        #for file in filenames:
+        #    minio_client.fput_object(
+        #        bucket_name, file, ''.join((path, file)))
+        #return None
 
     task1 = minio_add_bucket('songs')
 
