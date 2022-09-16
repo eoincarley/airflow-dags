@@ -46,7 +46,7 @@ with DAG(
     def minio_add_bucket(bucket_name, **kwargs):
        
         minio_port = ':9000'
-        minio_service = 'minio-service'
+        minio_service = 'localhost'
         minio_endpoint = ''.join((minio_service, minio_port))
         username = 'testkey'
         password = 'secretkey'
