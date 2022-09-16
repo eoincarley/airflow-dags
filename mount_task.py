@@ -45,12 +45,10 @@ with DAG(
             """
             Tests whether the volume has been mounted.
             """
-            try:
-                with open('/tmp/host/path/readme100.txt') as f:
-                    lines = f.readlines()
-                print(lines)
-            except:
-                print('Error reading file in mounted volume.')
+
+            with open('/tmp/host/path/testfile.txt') as f:
+                lines = f.readlines()
+            print(lines)
 
         volume_task = test_volume_mount()
 
