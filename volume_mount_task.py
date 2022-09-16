@@ -61,7 +61,7 @@ if k8s:
                         k8s.V1Container(
                             name="base",
                             volume_mounts=[
-                                k8s.V1VolumeMount(mount_path="/home/", name="example-kubernetes-test-volume")
+                                k8s.V1VolumeMount(mount_path="/tmp/", name="example-kubernetes-test-volume")
                             ],
                         )
                     ],
@@ -81,11 +81,10 @@ if k8s:
             Tests whether the volume has been mounted.
             """
 
-            with open('/home/readme.txt') as f:
-                lines = f.readlines()
-                print(lines)
+            with open('/tmp/volume_mount_test.txt', 'w') as foo:
+                foo.write('Hello')
 
-            return_code = os.system("cat /home/readme.txt")
+            return_code = os.system("cat /tmp/volume_mount_test.txt")
             if return_code != 0:
                 raise ValueError(f"Error when checking volume mount. Return code {return_code}")
 
