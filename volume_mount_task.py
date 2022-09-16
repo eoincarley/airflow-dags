@@ -61,7 +61,7 @@ if k8s:
                         k8s.V1Container(
                             name="base",
                             volume_mounts=[
-                                k8s.V1VolumeMount(mount_path="/foo/", name="example-kubernetes-test-volume")
+                                k8s.V1VolumeMount(mount_path="/home/", name="example-kubernetes-test-volume")
                             ],
                         )
                     ],
