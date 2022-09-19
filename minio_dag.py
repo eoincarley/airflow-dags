@@ -68,7 +68,7 @@ with DAG(
         print('Adding songs to Minio bucket')
 
         ti = kwargs['ti']
-        pull_obj = ti.xcom_pull(task_ids='minio_add_bucket')
+        pull_obj = ti.xcom_pull(task_ids='minio_add_bucket'. key='Minio-object')
         minio_client = pull_obj['minio-client']
         print(type(minio_client))
         
