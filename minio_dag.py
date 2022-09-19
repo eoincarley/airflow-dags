@@ -82,7 +82,7 @@ with DAG(
         
         for file in filenames:
             minio_client.fput_object(
-                bucket_name, file, ''.join((path, file)))
+                bucket_name, file, '/'.join((path, file)))
         
         return None
 
