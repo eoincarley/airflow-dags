@@ -103,34 +103,12 @@ with DAG(
         # Note here I'll need to mount a volume to the localhost. 
         # See https://www.aylakhan.tech/?p=655 for potential solution:
         # 
-        '''
-            my_python_task = PythonOperator(
-            task_id = "my_python_task",
-            executor_config={
-                "KubernetesExecutor": {
-                "volumes": [
-                    {
-                    "name": “my-volume",
-                    "persistentVolumeClaim":
-                        {
-                        "claimName": “my-volume"
-                        }
-                    }
-                ],
-                "volume_mounts": [
-                    {
-                    "name": “my-volume",
-                    "mountPath": “/usr/local/tmp"
-                    }
-                ]
-                }
-            },
-            ...
-            )
-        '''
-        path = "/mnt/c/Users/EoinCarley/Desktop/musicapp.songs/mp3files/"
-        filenames = os.listdir(path)
-        print(filenames)
+        try:
+            path = "/mnt/miniovolume"
+            filenames = os.listdir(path)
+            print(filenames)
+        except:
+            print('Cannot list filenames in %s' %(path))
         #for file in filenames:
         #    minio_client.fput_object(
         #        bucket_name, file, ''.join((path, file)))
