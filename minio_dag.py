@@ -105,16 +105,15 @@ with DAG(
         # 
 
         # See values.yaml for this volume mount definition.
-        try:
-            path = "/mnt/miniovolume"
-            filenames = os.listdir(path)
-            print(filenames)
-        except:
-            print('Cannot list filenames in %s' %(path))
-        #for file in filenames:
-        #    minio_client.fput_object(
-        #        bucket_name, file, ''.join((path, file)))
-        #return None
+        path = "/mnt/miniovolume"
+        filenames = os.listdir(path)
+        print(filenames)
+
+        for file in filenames:
+            minio_client.fput_object(
+                bucket_name, file, ''.join((path, file)))
+        
+        return None
 
     task1 = minio_add_bucket('songs')
 
