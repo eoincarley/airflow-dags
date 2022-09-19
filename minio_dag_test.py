@@ -19,7 +19,7 @@ def minio_add_bucket(bucket_name, minio_service = 'minio-service.default.svc.clu
                             username = 'testkey',
                             password = 'secretkey', **kwargs):
 
-        minio_endpoin = ':'.join((minio_service, minio_port))              
+        minio_endpoint = ':'.join((minio_service, minio_port))              
 
         print('Connecting to %s with user %s and password %s.' %(minio_endpoint, username, password))
 
@@ -35,8 +35,8 @@ def minio_add_bucket(bucket_name, minio_service = 'minio-service.default.svc.clu
         except S3Error as exc:
             print("Error occurred during bucket query/creation:", exc)
 
-
-        path = "/mnt/c/Users/EoinCarley/Desktop/musicapp.songs/mp3files/"
+        # See values.yaml for mount definition.
+        path = "/mnt/miniovolume/"
         filenames = os.listdir(path)
         print(filenames)
         #for file in filenames:
