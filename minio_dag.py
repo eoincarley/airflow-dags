@@ -18,8 +18,8 @@ log = logging.getLogger(__name__)
 # needed in multiple tasks. Cannot currently pass the client 
 # object between tasks using XComs.
 minio_service = 'minio-service.default.svc.cluster.local'
-minio_port = '9000',
-username = 'testkey',
+minio_port = '9000'
+username = 'testkey'
 password = 'secretkey'
 minio_endpoint = ':'.join((minio_service, minio_port)) 
 minio_client = Minio(minio_endpoint, 
