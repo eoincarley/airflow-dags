@@ -53,7 +53,7 @@ with DAG(
         # Note here I'll need to mount a volume to the localhost. 
         # See https://www.aylakhan.tech/?p=655 for potential solution:
         # 
-        minio_dict = {'minio-client': [1,2,3]}
+        minio_dict = {'minio-client': minio_client}
         kwargs['ti'].xcom_push(key='Minio-object', value=minio_dict)
 
         return None
