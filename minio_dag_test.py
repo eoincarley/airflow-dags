@@ -47,7 +47,7 @@ def minio_add_bucket(bucket_name, minio_service = 'minio-service.default.svc.clu
         
 
 with DAG(
-    dag_id='MusicApp-DAG',
+    dag_id='MusicApp-DAG-2',
     schedule_interval=None,
     start_date=datetime.datetime(2021, 1, 1),
     catchup=False,
