@@ -77,7 +77,7 @@ with DAG(
     #
     @task(task_id="minio_add_bucket")
     def minio_add_bucket(bucket_name, minio_service = 'minio-service.default.svc.cluster.local',
-                            minio_port='9000',
+                            minio_port = '9000',
                             username = 'testkey',
                             password = 'secretkey', **kwargs):
 
@@ -103,6 +103,8 @@ with DAG(
         # Note here I'll need to mount a volume to the localhost. 
         # See https://www.aylakhan.tech/?p=655 for potential solution:
         # 
+
+        # See values.yaml for this volume mount definition.
         try:
             path = "/mnt/miniovolume"
             filenames = os.listdir(path)
