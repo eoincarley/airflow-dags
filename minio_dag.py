@@ -53,8 +53,9 @@ with DAG(
         # Note here I'll need to mount a volume to the localhost. 
         # See https://www.aylakhan.tech/?p=655 for potential solution:
         # 
-        kwargs['ti'].xcom_push(key='Minio-object', value=minio_client)
-        
+        value1 = [1,2,3]
+        kwargs['ti'].xcom_push(key='Minio-object', value=value1)
+
         return None
 
     task1 = minio_add_bucket('songs')
@@ -68,7 +69,7 @@ with DAG(
 
         ti = kwargs['ti']
         minio_client = ti.xcom_pull(task_ids='minio_add_bucket')
-
+        print('Values: %s' %s(minio_client) )
         # See values.yaml for this volume mount definition.
         try:
             path = "/mnt/miniovolume"
@@ -77,9 +78,9 @@ with DAG(
         except:
             print('Cannot list filenames in %s' %(path))
         
-        for file in filenames:
-            minio_client.fput_object(
-                bucket_name, file, '/'.join((path, file)))
+        #for file in filenames:
+        #    minio_client.fput_object(
+        #        bucket_name, file, '/'.join((path, file)))
         
 
     task2 = add_songs_to_bucket()
