@@ -25,24 +25,6 @@ with DAG(
     #--------------------------------------------------------#
     #    Define bucket, Minio endpoint. Setup Minio client
     #
-    @task(task_id='add_info_to_db')
-    def add_info_to_db():
-        print('Added song information to database.')
-
-    task3 = add_info_to_db()
-
-    #--------------------------------------------------------#
-    #    Define bucket, Minio endpoint. Setup Minio client
-    #
-    @task(task_id='add_songs_to_bucket')
-    def add_songs_to_bucket():
-        print('Adding songs to Minio bucket')
-
-    task2 = add_songs_to_bucket()
-
-    #--------------------------------------------------------#
-    #    Define bucket, Minio endpoint. Setup Minio client
-    #
     @task(task_id="minio_add_bucket")
     def minio_add_bucket(bucket_name, minio_service = 'minio-service.default.svc.cluster.local',
                             minio_port = '9000',
@@ -72,6 +54,20 @@ with DAG(
         # See https://www.aylakhan.tech/?p=655 for potential solution:
         # 
 
+        return minio_client
+
+    task1 = minio_add_bucket('songs')
+
+    #--------------------------------------------------------#
+    #    Define bucket, Minio endpoint. Setup Minio client
+    #
+    @task(task_id='add_songs_to_bucket')
+    def add_songs_to_bucket(**kwargs):
+        print('Adding songs to Minio bucket')
+
+        ti = kwargs['ti']
+        minio_client = ti.xcom_pull(task_ids='minio_add_bucket')
+
         # See values.yaml for this volume mount definition.
         try:
             path = "/mnt/miniovolume"
@@ -84,8 +80,18 @@ with DAG(
             minio_client.fput_object(
                 bucket_name, file, '/'.join((path, file)))
         
-        return None
 
-    task1 = minio_add_bucket('songs')
+    task2 = add_songs_to_bucket()
 
-task1 >> task2 >> task3
+
+    #--------------------------------------------------------#
+    #    Define bucket, Minio endpoint. Setup Minio client
+    #
+    #@task(task_id='add_info_to_db')
+    #def add_info_to_db():
+    #    print('Added song information to database.')
+    #
+    #task3 = add_info_to_db()
+
+
+task1 >> task2 #>> task3
