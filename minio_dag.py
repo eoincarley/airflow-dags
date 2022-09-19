@@ -14,6 +14,19 @@ from airflow.decorators import task
 
 log = logging.getLogger(__name__)
 
+# Globals to define the minio_client. The client object is
+# needed in multiple tasks. Cannot currently pass the client 
+# object between tasks using XComs.
+minio_service = 'minio-service.default.svc.cluster.local'
+minio_port = '9000',
+username = 'testkey',
+password = 'secretkey'
+minio_endpoint = ':'.join((minio_service, minio_port)) 
+minio_client = Minio(minio_endpoint, 
+                        access_key = username,
+                        secret_key = password,
+                        secure = False)
+
 with DAG(
     dag_id='MusicApp-DAG-2',
     schedule_interval=None,
@@ -23,22 +36,14 @@ with DAG(
 ) as dag:
   
     #--------------------------------------------------------#
-    #    Define bucket, Minio endpoint. Setup Minio client
+    #
+    #       Add bucket via the Minio client object.
     #
     @task(task_id="minio_add_bucket")
-    def minio_add_bucket(bucket_name, minio_service = 'minio-service.default.svc.cluster.local',
-                            minio_port = '9000',
-                            username = 'testkey',
-                            password = 'secretkey', **kwargs):
-
-        minio_endpoint = ':'.join((minio_service, minio_port))              
+    def minio_add_bucket(bucket_name, **kwargs):             
 
         print('Connecting to %s with user %s and password %s.' %(minio_endpoint, username, password))
 
-        minio_client = Minio(minio_endpoint, 
-                                access_key = username,
-                                secret_key = password,
-                                secure = False)
         try:
             if (not minio_client.bucket_exists(bucket_name)):
                 minio_client.make_bucket(bucket_name)
@@ -47,14 +52,7 @@ with DAG(
         except S3Error as exc:
             print("Error occurred during bucket query/creation:", exc)
         
-        #--------------------------------------------------------#
-        #    Define bucket, Minio endpoint. Setup Minio client
-        #
-        # Note here I'll need to mount a volume to the localhost. 
-        # See https://www.aylakhan.tech/?p=655 for potential solution:
-        # 
-        minio_dict = {'minio-client': minio_client}
-        kwargs['ti'].xcom_push(key='Minio-object', value=minio_dict)
+        kwargs['ti'].xcom_push(key='minio-bucket', value=bucket_name)
 
         return None
 
@@ -64,28 +62,29 @@ with DAG(
     #    Define bucket, Minio endpoint. Setup Minio client
     #
     @task(task_id='add_songs_to_bucket')
-    def add_songs_to_bucket(**kwargs):
+    def add_songs_to_bucket(song_file_path, **kwargs):
         print('Adding songs to Minio bucket')
 
         ti = kwargs['ti']
-        pull_obj = ti.xcom_pull(task_ids='minio_add_bucket', key='Minio-object')
-        minio_client = pull_obj['minio-client']
-        print(type(minio_client))
+        bucket_name = ti.xcom_pull(task_ids='minio_add_bucket', key='minio-bucket')
         
-        # See values.yaml for this volume mount definition.
+        path = song_file_path
+        filenames = os.listdir(path)
+        
         try:
-            path = "/mnt/miniovolume"
-            filenames = os.listdir(path)
-            print(filenames)
+            for file in filenames:
+                minio_client.fput_object(
+                    bucket_name, file, '/'.join((path, file)))
         except:
-            print('Cannot list filenames in %s' %(path))
+            print('Could not add mp3files to bucket %s.' %(bucket_name))            
         
-        #for file in filenames:
-        #    minio_client.fput_object(
-        #        bucket_name, file, '/'.join((path, file)))
-        
+        return None
 
-    task2 = add_songs_to_bucket()
+        # Note here I'll need to mount a volume to the localhost. 
+        # See https://www.aylakhan.tech/?p=655 for potential solution:
+
+
+    task2 = add_songs_to_bucket('/mnt/miniovolume')
 
 
     #--------------------------------------------------------#
