@@ -53,8 +53,9 @@ with DAG(
         # Note here I'll need to mount a volume to the localhost. 
         # See https://www.aylakhan.tech/?p=655 for potential solution:
         # 
-
-        return minio_client
+        kwargs['ti'].xcom_push(key='Minio-object', value=minio_client)
+        
+        return None
 
     task1 = minio_add_bucket('songs')
 
