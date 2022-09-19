@@ -81,7 +81,7 @@ with DAG(
                             username = 'testkey',
                             password = 'secretkey', **kwargs):
 
-        minio_endpoin = ':'.join((minio_service, minio_port))              
+        minio_endpoint = ':'.join((minio_service, minio_port))              
 
         print('Connecting to %s with user %s and password %s.' %(minio_endpoint, username, password))
 
