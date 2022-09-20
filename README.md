@@ -4,7 +4,7 @@ The minio_dag.py file here implements a number of tasks to make a bucket in Mini
 It then adds song information to the MySQL database (not yet implemented). A number of things need to be set
 up first for Airflow to run.
 
-<span style="color:#728FCE;">Helm and Kubernetes (on WSL).</span>
+## <span style="color:#728FCE;">Helm and Kubernetes (on WSL).</span>
 
 Firstly install Airflow on your machine using the instructions found here. 
 
@@ -56,12 +56,7 @@ Then add the repo and Kubernetes secret information to values.yaml
     sshKeySecret: my-secret
 ```
 
-Once saved upgrade your helm again. 
-```
-kubectl delete statefulset --all -n airflow
-```
-
-After a few seconds, and if everything is running correctly, the codes in your github repo should be viewable in your Airflow console on localhost:8080.
+Once saved upgrade your helm again. After a few seconds, and if everything is running correctly, the codes in your github repo should be viewable in your Airflow console on localhost:8080.
 
 ## <span style="color:#728FCE;">Customising the airflow image</span>
 
