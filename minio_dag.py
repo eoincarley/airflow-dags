@@ -71,8 +71,11 @@ with DAG(
         path = song_file_path
         filenames = os.listdir(path)
         
+        print('Printing files')
+
         try:
             for file in filenames:
+                print(file)
                 minio_client.fput_object(
                     bucket_name, file, '/'.join((path, file)))
         except:
