@@ -69,7 +69,7 @@ with DAG(
         bucket_name = ti.xcom_pull(task_ids='minio_add_bucket', key='minio-bucket')
         
         path = song_file_path
-        filenames = os.listdir(path+'/*.mp3')
+        filenames = os.listdir(path)
         filenamesmp3 = [f for f in filenames if f.endswith('mp3')]
        
         for file in filenamesmp3:
