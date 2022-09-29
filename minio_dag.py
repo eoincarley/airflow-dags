@@ -70,7 +70,7 @@ with DAG(
         
         path = song_file_path
         filenames = os.listdir(path+'/*.mp3')
-        filenamesmp3 = [f for f in files if f.endswith('mp3')]
+        filenamesmp3 = [f for f in filenames if f.endswith('mp3')]
        
         for file in filenamesmp3:
                 print('Adding %s to the %s bucket' %(file, bucket_name))
