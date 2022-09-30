@@ -6,7 +6,7 @@ from airflow.models.baseoperator import BaseOperator
 
 
 class HelloOperator(BaseOperator):
-    def __init__(self, name: str, **kwargs) -> None:
+    def __init__(self, name: str, property: str, **kwargs) -> None:
         super().__init__(**kwargs)
         self.name = name
         print(property)
