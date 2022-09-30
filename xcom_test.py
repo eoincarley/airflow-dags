@@ -28,7 +28,7 @@ with DAG(
         print('Doing task 1')
         a = [1,2,3,4]
         
-        kwargs['ti'].xcom_push(key='someobject', value=Minio)
+        kwargs['ti'].xcom_push(key='someobject', value=Minio.__dict__)
         
         return None
 
