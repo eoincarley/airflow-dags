@@ -47,7 +47,7 @@ with DAG(
 
     hello_operator = PythonOperator(task_id='hello_task', python_callable=print_hello)
 
-    hello_task = HelloOperator(task_id="sample-task", name="foo_bar", property='Some sameple text')
+    hello_task = HelloOperator(task_id="sample-task", name="foo_bar", dag = dag, property='Some sameple text')
 
 
 hello_operator >> hello_task
