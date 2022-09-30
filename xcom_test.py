@@ -24,7 +24,7 @@ with DAG(
     #       Add bucket via the Minio client object.
     #
     @task(task_id="Task1")
-    def taskone(bucket_name, **kwargs):             
+    def taskone(**kwargs):             
 
         print('Doing task 1')
         a = 'Eoin'
