@@ -9,10 +9,11 @@ class HelloOperator(BaseOperator):
     def __init__(self, name: str, property: str, **kwargs) -> None:
         super().__init__(**kwargs)
         self.name = name
-        print(property)
+        self.property = property
 
     def execute(self, context):
         message = f"Hello {self.name}"
+        print(self.property)
         print(message)
         return message
 
