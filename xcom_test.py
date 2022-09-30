@@ -42,8 +42,6 @@ with DAG(
         print('Doing Task2')
 
         ti = kwargs['ti']
-        import pdb
-        pdb.set_trace()
         name = ti.xcom_pull(task_ids='Task1', key='someobject')
         print(name)
         
