@@ -13,7 +13,6 @@ log = logging.getLogger(__name__)
 
 with DAG(
     dag_id='Xcom-test',
-    schedule_interval=None,
     start_date=datetime.datetime(2021, 1, 1),
     catchup=False,
     tags=['example'],
@@ -27,7 +26,7 @@ with DAG(
     def taskone(**kwargs):             
 
         print('Doing task 1')
-        a = 'Eoin'
+        a = [1,2,3,4]
         
         kwargs['ti'].xcom_push(key='someobject', value=a)
         
@@ -40,9 +39,11 @@ with DAG(
     #
     @task(task_id="Task2")
     def tasktwo(**kwargs):
-        print('Adding songs to Minio bucket')
+        print('Doing Task2')
 
         ti = kwargs['ti']
+        import pdb
+        pdb.set_trace()
         name = ti.xcom_pull(task_ids='Task1', key='someobject')
         print(name)
         
@@ -51,6 +52,10 @@ with DAG(
 
     task2 = tasktwo()
 
-
-
 task1 >> task2 
+
+if __name__ == "__main__":
+    from airflow.utils.state import State
+
+    dag.clear()
+    dag.run()
