@@ -17,7 +17,7 @@ class HelloOperator(BaseOperator):
         print(message)
         return message
 
-def print_hello():
+def print_hello(**kwargs):
 
     ti = kwargs['ti']
     ti.xcom_push(key='someobject', value='test')
