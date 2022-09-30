@@ -4,17 +4,27 @@ from airflow.operators.dummy_operator import DummyOperator
 from airflow.operators.python_operator import PythonOperator
 from airflow.models.baseoperator import BaseOperator
 
+from airflow.models import TaskInstance
+
+
 
 class HelloOperator(BaseOperator):
     def __init__(self, name: str, property: str, **kwargs) -> None:
         super().__init__(**kwargs)
         self.name = name
         self.property = property
+        self.dag = kwargs['dag']
+        
+        operator_instance = self.dag.get_task('hello_task')
+        task_status = TaskInstance(operator_instance, datetime.datetime.utcnow())
 
     def execute(self, context):
         message = f"Hello {self.name}"
         print(self.property)
         print(message)
+
+        
+
         return message
 
 def print_hello(**kwargs):
@@ -37,7 +47,7 @@ with DAG(
 
     hello_operator = PythonOperator(task_id='hello_task', python_callable=print_hello)
 
-    hello_task = HelloOperator(task_id="sample-task", name="foo_bar", property=ti.xcom_pull(task_ids='Task1', key='someobject'))
+    hello_task = HelloOperator(task_id="sample-task", name="foo_bar", property='Some sameple text')
 
 
 hello_operator >> hello_task
