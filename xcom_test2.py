@@ -16,7 +16,9 @@ class HelloOperator(BaseOperator):
         self.dag = kwargs['dag']
         
         operator_instance = self.dag.get_task('hello_task')
-        task_status = TaskInstance(operator_instance, datetime.utcnow())
+        task_status = TaskInstance(operator_instance)
+
+        print(type_status)
 
     def execute(self, context):
         message = f"Hello {self.name}"
