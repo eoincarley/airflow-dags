@@ -37,7 +37,7 @@ with DAG(
 
     hello_operator = PythonOperator(task_id='hello_task', python_callable=print_hello)
 
-    hello_task = HelloOperator(task_id="sample-task", name="foo_bar", property='This is a keyword arg.')
+    hello_task = HelloOperator(task_id="sample-task", name="foo_bar", property=ti.xcom_pull(task_ids='Task1', key='someobject'))
 
 
 hello_operator >> hello_task
