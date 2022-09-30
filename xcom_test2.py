@@ -9,6 +9,7 @@ class HelloOperator(BaseOperator):
     def __init__(self, name: str, **kwargs) -> None:
         super().__init__(**kwargs)
         self.name = name
+        print(property)
 
     def execute(self, context):
         message = f"Hello {self.name}"
@@ -16,17 +17,23 @@ class HelloOperator(BaseOperator):
         return message
 
 def print_hello():
+
+    ti = kwargs['ti']
+    ti.xcom_push(key='someobject', value='test')
     return 'Hello world from first Airflow DAG!'
 
 ###################################################
 
-dag = DAG('hello_world', description='Hello World DAG',
-          schedule_interval='0 12 * * *',
-          start_date=datetime(2017, 3, 20), catchup=False)
+with DAG(dag_id = 'hello_world', 
+    description='Hello World DAG',
+    schedule_interval='0 12 * * *',
+    start_date=datetime(2017, 3, 20),
+    catchup=False) 
+    as dag:
 
-hello_operator = PythonOperator(task_id='hello_task', python_callable=print_hello, dag=dag)
+    hello_operator = PythonOperator(task_id='hello_task', python_callable=print_hello)
 
-hello_task = HelloOperator(task_id="sample-task", name="foo_bar", dag=dag)
+    hello_task = HelloOperator(task_id="sample-task", name="foo_bar", property='This is a keyword arg.')
 
 
 hello_operator >> hello_task
