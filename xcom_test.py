@@ -3,7 +3,7 @@ import os
 import logging
 import time
 import datetime
-
+from minio import Minio
 
 from airflow import DAG
 from airflow.decorators import task
@@ -28,7 +28,7 @@ with DAG(
         print('Doing task 1')
         a = [1,2,3,4]
         
-        kwargs['ti'].xcom_push(key='someobject', value=a)
+        kwargs['ti'].xcom_push(key='someobject', value=Minio)
         
         return None
 
